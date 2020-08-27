@@ -31,10 +31,8 @@ export class CategoriasPage {
   ionViewDidLoad() {
     this.categoriaService.findAll().subscribe(response => {
       this.items = response;
-      console.log(this.bucketUrl);
     },
       error => {
-        console.log(error);
       })
   }
 }
