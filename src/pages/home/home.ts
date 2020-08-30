@@ -27,8 +27,22 @@ export class HomePage {
     this.menu.swipeEnable(true);
   }
 
+  ionViewDidEnter() {
+    if (this.auth.refreshToken() != null) {
+      this.auth.refreshToken().subscribe(response => {
+        if (this.auth.storage.getLocalUser() == null) {
+          this.navCtrl.setRoot('HomePage');
+        } else {
+          this.auth.successfulLogin(response.headers.get('Authorization'));
+          this.navCtrl.setRoot('CategoriasPage');
+        }
+      },
+        error => { }
+      );
+    }
+  }
+
   login() {
-    console.log(this.auth.authenticate(this.credenciaisDTO));
     this.auth.authenticate(this.credenciaisDTO).subscribe(response => {
       this.auth.successfulLogin(response.headers.get('Authorization'));
       this.navCtrl.setRoot('CategoriasPage');

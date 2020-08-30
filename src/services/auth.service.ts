@@ -16,7 +16,7 @@ export class AuthService {
     }
 
     authenticate(credenciaisDTO: CredenciaisDTO) {
-        
+
         return this.http.post(`${API_CONFIG.baseUrl}/login`, credenciaisDTO, {
             observe: 'response',
             responseType: 'text'
@@ -34,5 +34,21 @@ export class AuthService {
 
     logout() {
         this.storage.setLocalUser(null);
+    }
+
+    refreshToken() {
+
+        let localUser = this.storage.getLocalUser();
+        if (localUser != null) {
+            return this.http.post(
+                `${API_CONFIG.baseUrl}/authorization/refresh_token`,
+                {},
+                {
+                    observe: 'response',
+                    responseType: 'text'
+                })
+        } else {
+            return null;
+        }
     }
 }

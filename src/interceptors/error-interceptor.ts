@@ -49,7 +49,6 @@ export class ErrorInterceptor implements HttpInterceptor {
             ]
         });
         alert.present();
-        this.storage.setLocalUser(null);
     }
 
     handle401() {
