@@ -27,7 +27,7 @@ export class AuthService {
         let tok = authorizationValue.substring(7);
         let user: LocalUser = {
             token: tok,
-            email: this.JwtHelper.decodeToken(tok)
+            email: this.JwtHelper.decodeToken(tok).sub
         };
         this.storage.setLocalUser(user);
     }
