@@ -38,17 +38,21 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
     handle403(errorObj) {
-        let alert = this.alertController.create({
-            title: 'Erro ' + errorObj.status + ': ' + errorObj.error,
-            message: errorObj.message,
-            enableBackdropDismiss: false,
-            buttons: [
-                {
-                    text: 'Ok'
-                }
-            ]
-        });
-        alert.present();
+        if (this.storage.getLocalUser == null) {
+            let alert = this.alertController.create({
+                title: 'Erro ' + errorObj.status + ': ' + errorObj.error,
+                message: errorObj.message,
+                enableBackdropDismiss: false,
+                buttons: [
+                    {
+                        text: 'Ok'
+                    }
+                ]
+            });
+            alert.present();
+            this.storage.setLocalUser(null);
+        }
+        
     }
 
     handle401() {
