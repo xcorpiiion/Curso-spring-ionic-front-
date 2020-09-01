@@ -1,3 +1,4 @@
+import { ProdutoService } from './../services/domain/produto.service';
 import { AuthInterceptorProvider } from './../interceptors/auth-interceptor';
 import { ClienteService } from './../services/domain/cliente.service';
 import { StorageService } from './../services/storage_service';
@@ -36,7 +37,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
     ErrorInterceptorProvider,
     AuthService,
     StorageService,
-    ClienteService
+    ClienteService,
+    ProdutoService
   ]
 })
 export class AppModule {}
