@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { CarItem } from '../../models/cart_item';
 import { API_CONFIG } from '../../config/api.config';
+import { ProdutoDTO } from '../../models/produto.dto';
 
 @IonicPage()
 @Component({
@@ -27,12 +28,33 @@ export class CartPage {
   loadImageUrls() {
     for (var i=0; i<this.items.length; i++) {
       let item = this.items[i];
-      this.produto_service.getSmallImageFromBucket(item.produto.id)
+      console.log("O item é: " + item.produtoDTO.nome);
+      this.produto_service.getSmallImageFromBucket(item.produtoDTO.id)
         .subscribe(response => {
-          item.produto.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${item.produto.id}-small.jpg`;
+          item.produtoDTO.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${item.produtoDTO.id}-small.jpg`;
         },
         error => {});
     }
   }  
+
+  removeItem(produto: ProdutoDTO) {
+    this.items = this.cart_service.removeProduto(produto).items;
+  }
+
+  increaseQuantity(produto: ProdutoDTO) {
+    this.items = this.cart_service.increaseQuantity(produto).items;
+  }
+
+  decreaseQuantity(produto: ProdutoDTO) {
+    this.items = this.cart_service.dencreaseQuantity(produto).items;
+  }
+
+  total() : number {
+    return this.cart_service.totalCarrinho();
+  }  
+
+  continuarComprando() {
+    this.navCtrl.setRoot('CategoriasPage');
+  }
 
 }

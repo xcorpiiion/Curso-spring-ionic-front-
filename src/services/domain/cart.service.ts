@@ -2,6 +2,7 @@ import { ProdutoDTO } from './../../models/produto.dto';
 import { Cart } from './../../models/cart';
 import { StorageService } from './../storage_service';
 import { Injectable } from "@angular/core";
+import { API_CONFIG } from '../../config/api.config';
 
 @Injectable()
 export class CartService {
@@ -26,13 +27,65 @@ export class CartService {
 
     addProduto(produto: ProdutoDTO): Cart {
         let cart = this.getCart();
-        cart.items[0].produto = produto;
-        console.log(cart.items[0]);
-        let position = cart.items.findIndex(id => id.produto.id == produto.id);
+        let position = cart.items.findIndex(id => id.produtoDTO.id == produto.id);
         if (position == -1) {
-            cart.items.push({ quantidade: 1, produto: produto });
+            cart.items.push({ quantidade: 1, produtoDTO: produto });
         }
         this.storage.setCart(cart);
         return cart;
+    }
+
+    removeProduto(produto: ProdutoDTO): Cart {
+        let cart = this.getCart();
+        for (var i = 0; i < cart.items.length; i++) {
+            cart.items[i].produtoDTO = produto;
+        }
+        let position = cart.items.findIndex(id => id.produtoDTO.id == produto.id);
+        if (position != -1) {
+            cart.items.splice(position, 1);
+        }
+        this.storage.setCart(cart);
+        return cart;
+    }
+
+    recuperaUrlProduto(produtoDTO: ProdutoDTO): string {
+        return `${API_CONFIG.bucketBaseUrl}/prod${produtoDTO.id}-small.jpg`;
+    }
+
+    increaseQuantity(produto: ProdutoDTO): Cart {
+        let cart = this.getCart();
+        let url = [];
+        for (var i = 0; i < cart.items.length; i++) {
+            cart.items[i].produtoDTO.imageUrl = this.recuperaUrlProduto(cart.items[i].produtoDTO);
+        }
+        let position = cart.items.findIndex(id => id.produtoDTO.id == produto.id);
+        console.log("Quantidade de index do increment é: " + position);
+        if (position != -1) {
+            cart.items[position].quantidade++;
+        }
+        this.storage.setCart(cart);
+        return cart;
+    }
+
+    dencreaseQuantity(produto: ProdutoDTO): Cart {
+        let cart = this.getCart();
+        console.log(cart.items[0]);
+        let position = cart.items.findIndex(id => id.produtoDTO.id == produto.id);
+        if (position > -1 && cart.items[position].quantidade > 1) {
+            cart.items[position].quantidade--;
+        } else {
+            cart = this.removeProduto(produto);
+        }
+        this.storage.setCart(cart);
+        return cart;
+    }
+
+    totalCarrinho(): number {
+        let cart = this.getCart();
+        let valorTotalCarrinho = 0;
+        for (var i = 0; i < cart.items.length; i++) {
+            valorTotalCarrinho += cart.items[i].produtoDTO.preco * cart.items[i].quantidade;
+        }
+        return valorTotalCarrinho;
     }
 }
