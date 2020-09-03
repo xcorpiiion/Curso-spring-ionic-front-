@@ -45,7 +45,7 @@ export class EscolherEnderecoPage {
 
   nextPage(enderecoDTO: EnderecoDTO) {
     this.pedido.enderecoEntrega = {id: enderecoDTO.id};
-    console.log(this.pedido);
+    this.navCtrl.push('PagamentoPage', {pedido: this.pedido});
   }
 
 }
