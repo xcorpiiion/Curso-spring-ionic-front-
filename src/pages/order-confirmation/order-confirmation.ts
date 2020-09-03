@@ -1,3 +1,4 @@
+import { PedidoService } from './../../services/domain/pedido.service';
 import { ClienteService } from './../../services/domain/cliente.service';
 import { EnderecoDTO } from './../../models/endereco.dto';
 import { CartService } from './../../services/domain/cart.service';
@@ -18,23 +19,30 @@ export class OrderConfirmationPage {
   cartItems: CarItem[];
   cliente: ClienteDTO;
   endereco: EnderecoDTO;
+  id: string;
+  codigoPedido: string;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public cartService: CartService,
-    public clienteService: ClienteService) {
+    public clienteService: ClienteService, public pedidoService: PedidoService) {
     this.pedido = this.navParams.get('pedido');
     console.log("Pedido chegou com o valor")
     console.log(this.pedido);
+    this.id = this.pedido.enderecoEntrega.idCliente;
   }
 
   ionViewDidLoad() {
     this.cartItems = this.cartService.getCart().items;
-    this.clienteService.findById(this.pedido.cliente.id).subscribe(response => {
+    for(var i = 0; i < this.cartItems.length; i++) {
+      this.pedido.produtos[i] = this.cartItems[i].produtoDTO;
+    }
+    console.log(this.id);
+    this.clienteService.findById(this.id).subscribe(response => {
       this.cliente = response as ClienteDTO;
-      this.endereco = this.findEndereco(this.pedido.enderecoEntrega.id, response['enderecos']);
+      this.endereco = this.findEndereco(this.pedido.enderecoEntrega.idCliente, response['enderecos']);
     },
-    erros => {
-      this.navCtrl.setRoot('HomePage');
-    });
+      erros => {
+        this.navCtrl.setRoot('HomePage');
+      });
   }
 
   private findEndereco(id: string, enderecos: EnderecoDTO[]): EnderecoDTO {
@@ -45,5 +53,32 @@ export class OrderConfirmationPage {
   total() {
     return this.cartService.totalCarrinho();
   }
+
+  checkout() {
+    console.log("Dados do pedido");
+    console.log(this.pedido);
+    this.pedidoService.insert(this.pedido).subscribe(response => {
+      this.cartService.createOrClearCart();
+      this.codigoPedido = this.extractId(response.headers.get('location'));
+    },
+      error => {
+        if (error.status == 403) {
+          this.navCtrl.setRoot('HomePage');
+        }
+      });
+  }
+
+  back() {
+    this.navCtrl.setRoot('CartPage');
+  }
+
+  home() {
+    this.navCtrl.setRoot('CategoriasPage');
+  }
+
+private extractId(location: string): string {
+  let position = location.lastIndexOf('/');
+  return location.substring(position + 1);
+}
 
 }

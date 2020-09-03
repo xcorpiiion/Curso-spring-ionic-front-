@@ -1,3 +1,4 @@
+import { PagamentoDTO } from './../../models/pagamento.dto';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { PedidoDTO } from './../../models/pedido.dto';
 import { Component } from '@angular/core';
@@ -11,6 +12,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 export class PagamentoPage {
 
   pedido: PedidoDTO;
+  pagamentoDTO: PagamentoDTO;
   parcelas: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   formGroup: FormGroup;
@@ -26,14 +28,19 @@ export class PagamentoPage {
   }
 
   nextPage() {
-    let idCliente = this.pedido.cliente;
+    let idCliente = this.pedido.idCliente;
     let idEndereco = this.pedido.enderecoEntrega;
     let tipoPagamento = this.pedido.nomeTipoPagamento;
-    this.pedido = this.formGroup.value;
+    let itens = this.pedido.itensPedido;
+    this.pagamentoDTO = this.formGroup.value;
+    console.log("Pagemento tem o valor: ")
+    console.log(this.pagamentoDTO);
     console.log("Pedidos foi com o valor: ");
-    this.pedido.cliente = idCliente;
+    this.pedido.idCliente = idCliente;
     this.pedido.enderecoEntrega = idEndereco;
     this.pedido.nomeTipoPagamento = tipoPagamento;
+    this.pedido.itensPedido = itens;
+    this.pedido.pagamento = this.pagamentoDTO;
     console.log(this.pedido);
     this.navCtrl.setRoot('OrderConfirmationPage', {pedido: this.pedido});
   }

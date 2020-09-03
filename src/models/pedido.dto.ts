@@ -1,12 +1,14 @@
+import { ProdutoDTO } from './produto.dto';
 import { ItemPedidoDTO } from './item-pedido.dto';
 import { PagamentoDTO } from './pagamento.dto';
 import { ReferenciaDTO } from './referencia.dto';
 
 export interface PedidoDTO {
-    cliente: ReferenciaDTO;
+    idCliente: ReferenciaDTO;
     enderecoEntrega: ReferenciaDTO;
     pagamento: PagamentoDTO;
-    itens: ItemPedidoDTO[];
+    itensPedido: ItemPedidoDTO[];
     nomeTipoPagamento: string;
     numeroParcelas: number;
+    produtos: ProdutoDTO[];
 }

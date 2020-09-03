@@ -1,3 +1,3 @@
 export interface ReferenciaDTO {
-    id: string;
+    idCliente: string;
 }
