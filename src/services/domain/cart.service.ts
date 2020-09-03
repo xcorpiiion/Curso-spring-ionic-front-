@@ -59,7 +59,6 @@ export class CartService {
             cart.items[i].produtoDTO.imageUrl = this.recuperaUrlProduto(cart.items[i].produtoDTO);
         }
         let position = cart.items.findIndex(id => id.produtoDTO.id == produto.id);
-        console.log("Quantidade de index do increment é: " + position);
         if (position != -1) {
             cart.items[position].quantidade++;
         }
@@ -69,7 +68,6 @@ export class CartService {
 
     dencreaseQuantity(produto: ProdutoDTO): Cart {
         let cart = this.getCart();
-        console.log(cart.items[0]);
         let position = cart.items.findIndex(id => id.produtoDTO.id == produto.id);
         if (position > -1 && cart.items[position].quantidade > 1) {
             cart.items[position].quantidade--;

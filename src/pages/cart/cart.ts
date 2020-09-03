@@ -28,7 +28,6 @@ export class CartPage {
   loadImageUrls() {
     for (var i=0; i<this.items.length; i++) {
       let item = this.items[i];
-      console.log("O item é: " + item.produtoDTO.nome);
       this.produto_service.getSmallImageFromBucket(item.produtoDTO.id)
         .subscribe(response => {
           item.produtoDTO.imageUrl = `${API_CONFIG.bucketBaseUrl}/prod${item.produtoDTO.id}-small.jpg`;

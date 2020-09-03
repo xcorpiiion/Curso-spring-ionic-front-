@@ -13,7 +13,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class EscolherEnderecoPage {
 
-  items: EnderecoDTO[];
+  enderecos: EnderecoDTO[];
   pedido: PedidoDTO;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public clienteService: ClienteService,
@@ -22,16 +22,21 @@ export class EscolherEnderecoPage {
 
   ionViewDidLoad() {
     let LocalUser = this.storage.getLocalUser();
+    console.log("fora do if");
     if (LocalUser && LocalUser.email) {
+      console.log("entrou no if");
       this.clienteService.findByEmail(LocalUser.email).subscribe(response => {
-        this.items = response['enderecos'];
+        this.enderecos = response['enderecos'];
         let cart = this.cartService.getCart();
+        let id = { id: response['id'] };
+        console.log(id);
         this.pedido = {
-          cliente: {id: response['id']},
+          cliente: id,
           enderecoEntrega: null,
           pagamento: null,
           itens: cart.items.map(x => {return {quantidade: x.quantidade, produto: {id: x.produtoDTO.id}}})
         }
+        console.log(this.pedido);
       },
         error => {
           if (error.status == 403) {
@@ -44,8 +49,10 @@ export class EscolherEnderecoPage {
   }
 
   nextPage(enderecoDTO: EnderecoDTO) {
-    this.pedido.enderecoEntrega = {id: enderecoDTO.id};
-    this.navCtrl.push('PagamentoPage', {pedido: this.pedido});
+    this.pedido.enderecoEntrega = this.pedido.enderecoEntrega = {id: enderecoDTO.id};
+    console.log("dados são: ");
+    console.log(this.pedido);
+    this.navCtrl.push('PagamentoPage', { pedido: this.pedido });
   }
 
 }

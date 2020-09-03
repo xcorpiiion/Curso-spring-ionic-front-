@@ -1,3 +1,4 @@
+import { PedidoDTO } from './../models/pedido.dto';
 import { STORAGE_KEYS } from './../config/storage_keys.config';
 import { Injectable } from "@angular/core";
 import { LocalUser } from '../models/local_user';

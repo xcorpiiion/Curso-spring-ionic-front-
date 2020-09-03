@@ -37,7 +37,6 @@ export class CategoriasPage {
   }
 
   showProdutos(categoria_id: string) {
-    console.log(categoria_id);
     this.navCtrl.push('ProdutosPage', {categoriaId: categoria_id});
   }
 }

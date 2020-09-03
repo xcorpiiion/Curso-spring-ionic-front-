@@ -30,6 +30,7 @@
         <ion-option *ngFor="let n of parcelas; first as f" [value]="n" [selected]="f">{{n}}</ion-option>
       </ion-select>
     </ion-item>
-    <button ion-button block type="submit" [disabled]="formGroup.invalid">Próximo</button>
+    <button *ngIf="formGroup.value['@type'] == 'pagamentoCartao'" ion-button block type="submit" [disabled]="formGroup.invalid" (click)="pagamentoCartao()">Próximo</button>
+    <button *ngIf="formGroup.value['@type'] == 'pagamentoBoleto'" ion-button block type="submit" [disabled]="formGroup.invalid" (click)="pagamentoBoleto()">Próximo</button>
   </form>
 </ion-content>

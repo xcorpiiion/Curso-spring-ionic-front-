@@ -7,4 +7,6 @@ export interface PedidoDTO {
     enderecoEntrega: ReferenciaDTO;
     pagamento: PagamentoDTO;
     itens: ItemPedidoDTO[];
+    nomeTipoPagamento: string;
+    numeroParcelas: number;
 }
