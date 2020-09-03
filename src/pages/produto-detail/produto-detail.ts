@@ -19,6 +19,10 @@ export class ProdutoDetailPage {
   }
 
   ionViewDidLoad() {
+    this.carregarDados();
+  }
+
+  carregarDados() {
     let produto_id = this.navParams.get('produtoId');
     let loader = this.presentLoading();
     this.produto_service.findBYId(produto_id).subscribe(response => {
@@ -48,6 +52,13 @@ export class ProdutoDetailPage {
     });
     loader.present();
     return loader;
+  }
+
+  doRefresh(refresher) {
+    this.carregarDados();
+    setTimeout(() => {
+      refresher.complete();
+    }, 1000);
   }
 
 }
